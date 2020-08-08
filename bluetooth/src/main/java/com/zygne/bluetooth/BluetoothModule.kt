@@ -2,27 +2,31 @@ package com.zygne.bluetooth
 
 import android.app.Activity
 import android.widget.Toast
-import com.zygne.bluetooth.domain.base.IBluetoothPermissionManager
-import com.zygne.bluetooth.domain.implementation.BluetoothPermissionManager
-import com.zygne.bluetooth.view.BluetoothDialog
+import com.zygne.bluetooth.domain.base.DeviceFilter
+import com.zygne.bluetooth.domain.base.IPermissionManager
+import com.zygne.bluetooth.domain.implementation.DeviceFilterManager
+import com.zygne.bluetooth.domain.implementation.DeviceManager
+import com.zygne.bluetooth.domain.implementation.PermissionManager
+import com.zygne.bluetooth.presentation.ui.BluetoothDialog
 
-class BluetoothModule(private val activity: Activity) : IBluetoothPermissionManager.Listener {
+class BluetoothModule(private val activity: Activity) : IPermissionManager.Listener {
 
-    private val bluetoothPermissioManager = BluetoothPermissionManager(activity, this)
+    private val bluetoothPermissionManager = PermissionManager(activity, this)
+    private val bluetoothManager = DeviceManager(activity)
+    private val filterManager = DeviceFilterManager()
 
     fun start() {
-
-        if (!bluetoothPermissioManager.hasBluetoothPermission()) {
-            bluetoothPermissioManager.requestBluetoothPermission()
+        filterManager.setFilter(DeviceFilter.OuiFilter("40:83:DE"))
+        if (!bluetoothPermissionManager.hasRequiredPermission()) {
+            bluetoothPermissionManager.requestRequiredPermission()
         }
-
     }
 
     fun showBluetoothDialog() {
-        if (bluetoothPermissioManager.hasBluetoothPermission()) {
-            BluetoothDialog(activity).show()
+        if (bluetoothPermissionManager.hasRequiredPermission()) {
+            BluetoothDialog(activity, bluetoothManager, filterManager).show()
         } else {
-            bluetoothPermissioManager.requestBluetoothPermission()
+            bluetoothPermissionManager.requestRequiredPermission()
         }
     }
 
@@ -31,7 +35,7 @@ class BluetoothModule(private val activity: Activity) : IBluetoothPermissionMana
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        bluetoothPermissioManager.handlePermissionRequest(
+        bluetoothPermissionManager.handlePermissionRequest(
             requestCode,
             permissions,
             grantResults
@@ -43,5 +47,4 @@ class BluetoothModule(private val activity: Activity) : IBluetoothPermissionMana
     override fun onBluetoothPermissionDenied() {
         Toast.makeText(activity, "Permission to denied", Toast.LENGTH_LONG).show()
     }
-
 }

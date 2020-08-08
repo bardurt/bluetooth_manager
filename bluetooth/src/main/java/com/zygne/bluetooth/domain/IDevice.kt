@@ -5,12 +5,13 @@ import android.bluetooth.BluetoothDevice.BOND_BONDED
 import com.zygne.bluetooth.domain.base.Connection
 import com.zygne.bluetooth.domain.base.IDevice
 
-class BTDevice(val bluetoothDevice: BluetoothDevice) : IDevice {
+class IDevice(val bluetoothDevice: BluetoothDevice) :
+    IDevice {
 
-    override val name : String
+    override val name: String
         get() = bluetoothDevice.name ?: "UNKNOWN NAME"
 
-    override val address : String
+    override val address: String
         get() = bluetoothDevice.address ?: "UNKNOWN ADDRESS"
 
     override val oui: String
@@ -25,14 +26,13 @@ class BTDevice(val bluetoothDevice: BluetoothDevice) : IDevice {
 
     override fun equals(other: Any?): Boolean {
 
-        if(other == null){
+        if (other == null) {
             return false
         }
-        if(other !is BTDevice){
+        if (other !is com.zygne.bluetooth.domain.IDevice) {
             return false
         }
 
         return bluetoothDevice == other.bluetoothDevice
     }
 }
-
