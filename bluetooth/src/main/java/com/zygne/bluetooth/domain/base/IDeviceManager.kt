@@ -1,6 +1,6 @@
 package com.zygne.bluetooth.domain.base
 
-import com.zygne.bluetooth.domain.BTDevice
+import com.zygne.bluetooth.domain.IDevice
 
 /**
  * Created by Bardur Thomsen on 3/28/19.
@@ -9,7 +9,7 @@ import com.zygne.bluetooth.domain.BTDevice
  * Usually an implementation will rely on the Android's Context, so it's pretty important
  * to call the onDestroy() method when finishing in order to avoid memory leaks.
  */
-interface IBluetoothManager {
+interface IDeviceManager {
 
     /**
      * Commands for hacking the Bluetooth module.
@@ -24,12 +24,12 @@ interface IBluetoothManager {
     /**
      * get list of all devices which are BONDED to this devices
      */
-    fun getBondedDevices(): MutableList<BTDevice>
+    fun getConnectedDevices(): MutableList<com.zygne.bluetooth.domain.base.IDevice>
 
     /**
      * get list of all devices which are not BONDED
      */
-    fun getUnbondedDevices(): MutableList<BTDevice>
+    fun getNewDevices(): MutableList<com.zygne.bluetooth.domain.base.IDevice>
 
     /**
      * check if bluetooth is activated
@@ -39,7 +39,7 @@ interface IBluetoothManager {
     /**
      * set listener to get updates
      */
-    fun setListener(listener: IBluetoothListener)
+    fun setListener(listener: Listener)
 
     /**
      * Start bluetooth discovery process, look for bluetooth devices
@@ -54,12 +54,12 @@ interface IBluetoothManager {
     /**
      * Start the pairing process with a bluetooth device
      */
-    fun createBond(device: BTDevice): Boolean
+    fun connectDevice(address: String): Boolean
 
     /**
      * Remove the bond
      */
-    fun removeBond(device: BTDevice): Boolean
+    fun disconnectDevice(address: String): Boolean
 
     /**
      * turn on bluetooth
@@ -74,21 +74,18 @@ interface IBluetoothManager {
     /**
      * check if this devices supports bluetooth
      */
-    fun supportsBluetooth(): Boolean
+    fun supportsFeature(): Boolean
 
     /**
      * method for cleaning up
      */
     fun destroy()
 
-    interface IBluetoothListener {
-        fun onDiscoveryStarted()
-        fun onDiscoveryFinished()
-        fun onNewDeviceFound(bluetoothDevice: BTDevice)
-        fun onBluetoothStateChange(state: Int)
-        fun onDeviceBonded(bluetoothDevice: BTDevice)
-        fun onDeviceUnBonded(bluetoothDevice: BTDevice)
-
+    interface Listener {
+        fun onDeviceLookUpStarted()
+        fun onDeviceLookUpFinished()
+        fun onNewDeviceFound(device: IDevice)
+        fun onDeviceConnected(device: IDevice)
+        fun onDeviceDisconnected(device: IDevice)
     }
-
 }

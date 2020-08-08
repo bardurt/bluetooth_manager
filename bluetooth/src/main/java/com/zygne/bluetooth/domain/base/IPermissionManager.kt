@@ -1,14 +1,14 @@
 package com.zygne.bluetooth.domain.base
 
-interface IBluetoothPermissionManager {
+interface IPermissionManager {
 
-    fun hasBluetoothPermission(): Boolean
+    fun hasRequiredPermission(): Boolean
 
-    fun requestBluetoothPermission()
+    fun requestRequiredPermission()
 
     fun handlePermissionRequest(requestCode: Int, permissions: Array<out String>, grantResults: IntArray)
 
-    interface Listener{
+    interface Listener {
         fun onBluetoothPermissionGranted()
         fun onBluetoothPermissionDenied()
     }

@@ -1,4 +1,4 @@
-package com.zygne.bluetooth.view
+package com.zygne.bluetooth.presentation.ui
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -73,12 +73,11 @@ internal class DeviceAdapter(
         val tvState: TextView = itemView.tv_device_state
         val btnPair: Button = itemView.btn_connect_device
         val btnUnpair: Button = itemView.btn_disconnect_device
-        val tvOui : TextView = itemView.tv_device_oui
+        val tvOui: TextView = itemView.tv_device_oui
     }
 
     interface Callback {
         fun onAttachSelected(position: Int)
         fun onDetachSelected(position: Int)
     }
-
 }

@@ -5,22 +5,21 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.zygne.bluetooth.domain.base.IBluetoothPermissionManager
+import com.zygne.bluetooth.domain.base.IPermissionManager
 
-class BluetoothPermissionManager(
+class PermissionManager(
     private val activity: Activity,
-    private val listener: IBluetoothPermissionManager.Listener
-) : IBluetoothPermissionManager {
+    private val listener: IPermissionManager.Listener
+) : IPermissionManager {
 
-
-    override fun hasBluetoothPermission(): Boolean {
+    override fun hasRequiredPermission(): Boolean {
         return ContextCompat.checkSelfPermission(
             activity,
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-    override fun requestBluetoothPermission() {
+    override fun requestRequiredPermission() {
         ActivityCompat.requestPermissions(
             activity,
             arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), BLUETOOTH_PERMISSION
@@ -36,8 +35,8 @@ class BluetoothPermissionManager(
             BLUETOOTH_PERMISSION -> {
 
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.isNotEmpty()
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                if (grantResults.isNotEmpty() &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED
                 ) {
                     listener.onBluetoothPermissionGranted()
                 } else {
@@ -47,7 +46,6 @@ class BluetoothPermissionManager(
             }
         }
     }
-
 
     companion object {
         private const val BLUETOOTH_PERMISSION = 10012
