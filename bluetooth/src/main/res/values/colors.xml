@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="color_bluetooth_dialog_background">#19182F</color>
+    <color name="color_white" >#fff</color>
+    <color name="color_divider">#B3ACAC</color>
+    <color name="color_button_pair_normal_outline">#908B8B</color>
+    <color name="color_button_pair_normal_fill">#31547F</color>
+    <color name="color_button_pair_pressed_outline">#fff</color>
+    <color name="color_button_pair_pressed_fill">#3D689E</color>
+    <color name="color_button_unpair_normal_outline">#908B8B</color>
+    <color name="color_button_unpair_normal_fill">#E5431B</color>
+    <color name="color_button_unpair_pressed_outline">#809D9E</color>
+    <color name="color_button_unpair_pressed_fill">#E5431B</color>
+</resources>

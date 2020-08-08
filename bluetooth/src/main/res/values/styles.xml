@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="table_header_text">
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:textSize">@dimen/text_size_table_header</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+</resources>
