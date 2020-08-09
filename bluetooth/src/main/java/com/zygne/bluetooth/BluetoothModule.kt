@@ -28,6 +28,10 @@ class BluetoothModule(private val activity: Activity) : IPermissionManager.Liste
         }
     }
 
+    fun stop() {
+        bluetoothManager.destroy()
+    }
+
     fun handlePermissionRequest(
         requestCode: Int,
         permissions: Array<out String>,

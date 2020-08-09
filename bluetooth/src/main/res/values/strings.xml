@@ -10,4 +10,6 @@
     <string name="action">Action</string>
     <string name="bluetooth_not_supported_error">This device does not support Bluetooth!!</string>
     <string name="dismiss">Dismiss</string>
+    <string name="scanning_for_bluetooth_devices">Scanning for Bluetooth devices</string>
+    <string name="scan">Scan</string>
 </resources>
