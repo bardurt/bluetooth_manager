@@ -68,37 +68,15 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/color_white"
-                android:text="@string/oui" />
+                android:text="@string/vendor" />
 
             <TextView
-                android:id="@+id/tv_device_oui"
+                android:id="@+id/tv_device_vendor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/color_white"
-                tools:text="20:88:B8" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="@color/color_white"
-                android:text="@string/status" />
-
-            <TextView
-                android:id="@+id/tv_device_state"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="@color/color_white"
-                tools:text="NEW" />
+                tools:text="" />
 
         </LinearLayout>
 

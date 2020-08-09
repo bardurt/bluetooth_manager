@@ -12,8 +12,8 @@ class DeviceFilterManagerTest {
 
     @Test
     fun `Given a list of devices, When no filter specified, Then list should not be updated`() {
-        val device1 = Device1()
-        val device2 = Device2()
+        val device1 = Device1("")
+        val device2 = Device2("")
 
         val deviceList = mutableListOf(device1, device2)
 
@@ -24,8 +24,8 @@ class DeviceFilterManagerTest {
 
     @Test
     fun `Given a list of devices, When name filter specified for an existing device, Then list should only contain matched device`() {
-        val device1 = Device1()
-        val device2 = Device2()
+        val device1 = Device1("")
+        val device2 = Device2("")
 
         val deviceList = mutableListOf(device1, device2)
         deviceFilterManager.setFilter(DeviceFilter.NameFilter(device1.name))
@@ -39,8 +39,8 @@ class DeviceFilterManagerTest {
 
     @Test
     fun `Given a list of devices, When name filter specified for non existing device, Then list should be empty`() {
-        val device1 = Device1()
-        val device2 = Device2()
+        val device1 = Device1("")
+        val device2 = Device2("")
 
         val deviceList = mutableListOf(device1, device2)
         deviceFilterManager.setFilter(DeviceFilter.NameFilter("Some Name"))
@@ -50,7 +50,7 @@ class DeviceFilterManagerTest {
         Assert.assertTrue(deviceList.isEmpty())
     }
 
-    class Device1 : IDevice {
+    class Device1(override var vendor: String) : IDevice {
         override val name: String
             get() = "Device1"
         override val address: String
@@ -65,7 +65,7 @@ class DeviceFilterManagerTest {
         }
     }
 
-    class Device2 : IDevice {
+    class Device2(override var vendor: String) : IDevice {
         override val name: String
             get() = "Device2"
         override val address: String

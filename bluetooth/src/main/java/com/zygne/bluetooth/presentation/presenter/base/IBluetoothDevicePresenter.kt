@@ -5,6 +5,8 @@ import com.zygne.bluetooth.domain.base.IDevice
 internal interface IBluetoothDevicePresenter {
 
     fun start()
+    fun activate()
+    fun deactivate()
     fun startDeviceLookUp()
     fun stopDeviceLookUp()
     fun createBond(position: Int)
@@ -14,5 +16,7 @@ internal interface IBluetoothDevicePresenter {
         fun updateDeviceList(devices: List<IDevice>)
         fun deviceLookUpStopped()
         fun deviceLookUpStarted()
+        fun onActive()
+        fun onInactive()
     }
 }

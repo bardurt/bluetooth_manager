@@ -2,6 +2,8 @@ package com.zygne.bluetooth.domain.implementation
 
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothAdapter.STATE_OFF
+import android.bluetooth.BluetoothAdapter.STATE_ON
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -19,6 +21,7 @@ class BluetoothDeviceManager(
 ) : IDeviceManager {
 
     private var listener: IDeviceManager.Listener? = null
+    private var connectionListener: IDeviceManager.ConnectionListener? = null
 
     private val bluetoothFilter: IntentFilter = IntentFilter().apply {
         addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
@@ -91,15 +94,27 @@ class BluetoothDeviceManager(
         if (currentState == previousState) {
             return
         }
+
+        if (currentState != null) {
+            if (currentState == STATE_OFF) {
+                connectionListener?.onConnectionStateChanged(IDeviceManager.ConnectionState.Inactive)
+            } else if (currentState == STATE_ON) {
+                connectionListener?.onConnectionStateChanged(IDeviceManager.ConnectionState.Active)
+            }
+        }
     }
 
     override fun setListener(listener: IDeviceManager.Listener) {
         this.listener = listener
     }
 
-    override fun isBluetoothOn(): Boolean = bluetoothAdapter?.isEnabled ?: false
+    override fun setConnectionListener(listener: IDeviceManager.ConnectionListener) {
+        this.connectionListener = listener
+    }
 
-    override fun turnOn(): Boolean {
+    override fun isActive(): Boolean = bluetoothAdapter?.isEnabled ?: false
+
+    override fun activate(): Boolean {
         bluetoothAdapter?.let {
             it.enable()
             return true
@@ -196,7 +211,7 @@ class BluetoothDeviceManager(
         return true
     }
 
-    override fun turnOff(): Boolean {
+    override fun deactivate(): Boolean {
         bluetoothAdapter?.let {
             if (it.isDiscovering) {
                 it.cancelDiscovery()

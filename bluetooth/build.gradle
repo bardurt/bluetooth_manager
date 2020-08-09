@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply from: "../ktlint.gradle"
 apply plugin: 'com.github.dcendents.android-maven'
+group='com.github.bardurt'
 
 android {
     compileSdkVersion 29

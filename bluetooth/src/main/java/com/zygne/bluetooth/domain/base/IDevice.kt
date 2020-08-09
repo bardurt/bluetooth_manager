@@ -10,5 +10,7 @@ interface IDevice {
 
     val connection: Connection
 
+    var vendor: String
+
     fun attached(): Boolean
 }
