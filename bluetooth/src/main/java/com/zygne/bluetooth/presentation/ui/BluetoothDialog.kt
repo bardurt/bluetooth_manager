@@ -26,6 +26,7 @@ internal class BluetoothDialog(
 
     private var discoveryProgressView: LinearLayout
     private var btnStartDiscovery: Switch
+    private var btnActivateBluetooth: Switch
     private var recyclerView: RecyclerView
 
     private var bluetoothDeviceAdapter: DeviceAdapter? = null
@@ -33,6 +34,8 @@ internal class BluetoothDialog(
     private var presenter: IBluetoothDevicePresenter
 
     init {
+        presenter = BluetoothDevicePresenter(this, bluetoothManager, filterManager)
+
         setContentView(R.layout.dialog_bluetooth_settings)
         window?.setLayout(
             WindowManager.LayoutParams.MATCH_PARENT,
@@ -50,6 +53,14 @@ internal class BluetoothDialog(
             }
         }
 
+        btnActivateBluetooth = btn_activate_bluetooth
+        btnActivateBluetooth.setOnCheckedChangeListener { _, isChecked ->
+            when {
+                isChecked -> presenter.activate()
+                else -> presenter.deactivate()
+            }
+        }
+
         bluetoothDeviceAdapter =
             DeviceAdapter(
                 activity,
@@ -60,7 +71,6 @@ internal class BluetoothDialog(
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = bluetoothDeviceAdapter
 
-        presenter = BluetoothDevicePresenter(this, bluetoothManager, filterManager)
         presenter.start()
     }
 
@@ -93,5 +103,13 @@ internal class BluetoothDialog(
 
     override fun deviceLookUpStarted() {
         ll_discovery_progress_view.visibility = View.VISIBLE
+    }
+
+    override fun onActive() {
+        btnActivateBluetooth.isChecked = true
+    }
+
+    override fun onInactive() {
+        btnActivateBluetooth.isChecked = false
     }
 }

@@ -22,12 +22,14 @@ interface IDeviceManager {
     /**
      * check if bluetooth is activated
      */
-    fun isBluetoothOn(): Boolean
+    fun isActive(): Boolean
 
     /**
      * set listener to get updates
      */
     fun setListener(listener: Listener)
+
+    fun setConnectionListener(listener: ConnectionListener)
 
     /**
      * Start bluetooth discovery process, look for bluetooth devices
@@ -52,12 +54,12 @@ interface IDeviceManager {
     /**
      * turn on bluetooth
      */
-    fun turnOn(): Boolean
+    fun activate(): Boolean
 
     /**
      *     turn off bluetooth
      */
-    fun turnOff(): Boolean
+    fun deactivate(): Boolean
 
     /**
      * check if this devices supports bluetooth
@@ -75,5 +77,14 @@ interface IDeviceManager {
         fun onNewDeviceFound(device: IDevice)
         fun onDeviceConnected(device: IDevice)
         fun onDeviceDisconnected(device: IDevice)
+    }
+
+    interface ConnectionListener {
+        fun onConnectionStateChanged(state: ConnectionState)
+    }
+
+    enum class ConnectionState {
+        Active,
+        Inactive
     }
 }

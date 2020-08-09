@@ -2,15 +2,20 @@ package com.zygne.bluetooth.presentation.presenter.implementation
 
 import com.zygne.bluetooth.domain.base.IDevice
 import com.zygne.bluetooth.domain.base.IDeviceManager
+import com.zygne.bluetooth.domain.base.IVendorMapper
 import com.zygne.bluetooth.domain.implementation.BluetoothDeviceManager
 import com.zygne.bluetooth.domain.implementation.DeviceFilterManager
+import com.zygne.bluetooth.domain.implementation.VendorMapper
 import com.zygne.bluetooth.presentation.presenter.base.IBluetoothDevicePresenter
 
 internal class BluetoothDevicePresenter(
     private val view: IBluetoothDevicePresenter.View,
     private val bluetoothManager: BluetoothDeviceManager,
-    private val filterManager: DeviceFilterManager
-) : IBluetoothDevicePresenter, IDeviceManager.Listener {
+    private val filterManager: DeviceFilterManager,
+    private val vendorMapper: IVendorMapper = VendorMapper()
+) : IBluetoothDevicePresenter, IDeviceManager.Listener, IDeviceManager.ConnectionListener {
+
+    private var startLookupOnActivation = false
 
     private val bluetoothDeviceList: MutableList<com.zygne.bluetooth.domain.base.IDevice> =
         mutableListOf()
@@ -18,7 +23,13 @@ internal class BluetoothDevicePresenter(
     override fun start() {
         bluetoothManager.setListener(this)
 
-        bluetoothManager.turnOn()
+        bluetoothManager.setConnectionListener(this)
+
+        if (bluetoothManager.isActive()) {
+            view.onActive()
+        } else {
+            view.onInactive()
+        }
 
         bluetoothDeviceList.addAll(bluetoothManager.getConnectedDevices())
 
@@ -27,7 +38,19 @@ internal class BluetoothDevicePresenter(
         view.updateDeviceList(bluetoothDeviceList)
     }
 
+    override fun activate() {
+        bluetoothManager.activate()
+    }
+
+    override fun deactivate() {
+        bluetoothManager.deactivate()
+    }
+
     override fun startDeviceLookUp() {
+        if (!bluetoothManager.isActive()) {
+            startLookupOnActivation = true
+            bluetoothManager.activate()
+        }
         bluetoothManager.startDiscovery()
     }
 
@@ -49,6 +72,7 @@ internal class BluetoothDevicePresenter(
 
     override fun onDeviceLookUpFinished() {
         view.deviceLookUpStopped()
+        startLookupOnActivation = false
     }
 
     override fun onNewDeviceFound(device: IDevice) {
@@ -58,6 +82,10 @@ internal class BluetoothDevicePresenter(
         bluetoothDeviceList.addAll(bluetoothManager.getNewDevices())
 
         filterManager.filterDevices(bluetoothDeviceList)
+
+        for (item in bluetoothDeviceList) {
+            vendorMapper.mapVendorToDevice(item)
+        }
 
         view.updateDeviceList(bluetoothDeviceList)
     }
@@ -80,5 +108,16 @@ internal class BluetoothDevicePresenter(
         filterManager.filterDevices(bluetoothDeviceList)
 
         view.updateDeviceList(bluetoothDeviceList)
+    }
+
+    override fun onConnectionStateChanged(state: IDeviceManager.ConnectionState) {
+        if (state == IDeviceManager.ConnectionState.Active) {
+            view.onActive()
+            if (startLookupOnActivation) {
+                bluetoothManager.startDiscovery()
+            }
+        } else {
+            view.onInactive()
+        }
     }
 }

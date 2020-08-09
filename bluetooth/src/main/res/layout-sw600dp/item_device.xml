@@ -15,6 +15,15 @@
         android:paddingBottom="8dp">
 
         <TextView
+            android:id="@+id/tv_device_vendor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/color_white"
+            tools:text="NEW" />
+
+        <TextView
             android:id="@+id/tv_device_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -31,24 +40,6 @@
             android:gravity="center"
             android:textColor="@color/color_white"
             tools:text="20:88:BB:FA:30" />
-
-        <TextView
-            android:id="@+id/tv_device_oui"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textColor="@color/color_white"
-            tools:text="20:88:B8" />
-
-        <TextView
-            android:id="@+id/tv_device_state"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textColor="@color/color_white"
-            tools:text="NEW" />
 
         <RelativeLayout
             android:layout_width="0dp"

@@ -8,6 +8,8 @@ import com.zygne.bluetooth.domain.base.IDevice
 class BTDevice(val bluetoothDevice: BluetoothDevice) :
     IDevice {
 
+    private var vendorName = ""
+
     override val name: String
         get() = bluetoothDevice.name ?: "UNKNOWN NAME"
 
@@ -23,6 +25,12 @@ class BTDevice(val bluetoothDevice: BluetoothDevice) :
     override fun attached(): Boolean {
         return bluetoothDevice.bondState == BOND_BONDED
     }
+
+    override var vendor: String
+        get() = vendorName
+        set(value) {
+            vendorName = value
+        }
 
     override fun equals(other: Any?): Boolean {
 

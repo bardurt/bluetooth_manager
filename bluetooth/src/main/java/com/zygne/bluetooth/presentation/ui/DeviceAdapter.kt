@@ -40,17 +40,16 @@ internal class DeviceAdapter(
 
             holder.tvAddress.text = address
 
-            holder.tvOui.text = oui
+            holder.tvVendor.text = vendor
 
             if (attached()) {
-                holder.tvState.text = "Connected"
                 holder.btnPair.visibility = View.INVISIBLE
                 holder.btnUnpair.visibility = View.VISIBLE
             } else {
-                holder.tvState.text = "New"
                 holder.btnPair.visibility = View.VISIBLE
                 holder.btnUnpair.visibility = View.INVISIBLE
             }
+
             initButtons(holder, position)
         }
     }
@@ -70,10 +69,9 @@ internal class DeviceAdapter(
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvName: TextView = itemView.tv_device_name
         val tvAddress: TextView = itemView.tv_device_address
-        val tvState: TextView = itemView.tv_device_state
         val btnPair: Button = itemView.btn_connect_device
         val btnUnpair: Button = itemView.btn_disconnect_device
-        val tvOui: TextView = itemView.tv_device_oui
+        val tvVendor: TextView = itemView.tv_device_vendor
     }
 
     interface Callback {
