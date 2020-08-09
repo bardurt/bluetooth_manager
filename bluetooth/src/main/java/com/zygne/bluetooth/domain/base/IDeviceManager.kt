@@ -1,7 +1,5 @@
 package com.zygne.bluetooth.domain.base
 
-import com.zygne.bluetooth.domain.IDevice
-
 /**
  * Created by Bardur Thomsen on 3/28/19.
  *
@@ -12,24 +10,14 @@ import com.zygne.bluetooth.domain.IDevice
 interface IDeviceManager {
 
     /**
-     * Commands for hacking the Bluetooth module.
-     * Note : The android Bluetooth module is VERY buggy, some brands require some hack,
-     * which use these commands.
-     */
-    companion object Commands {
-        const val CREATE_BOND = "createBond"
-        const val REMOVE_BOND = "removeBond"
-    }
-
-    /**
      * get list of all devices which are BONDED to this devices
      */
-    fun getConnectedDevices(): MutableList<com.zygne.bluetooth.domain.base.IDevice>
+    fun getConnectedDevices(): MutableList<IDevice>
 
     /**
      * get list of all devices which are not BONDED
      */
-    fun getNewDevices(): MutableList<com.zygne.bluetooth.domain.base.IDevice>
+    fun getNewDevices(): MutableList<IDevice>
 
     /**
      * check if bluetooth is activated
@@ -54,12 +42,12 @@ interface IDeviceManager {
     /**
      * Start the pairing process with a bluetooth device
      */
-    fun connectDevice(address: String): Boolean
+    fun connectDevice(device: IDevice): Boolean
 
     /**
      * Remove the bond
      */
-    fun disconnectDevice(address: String): Boolean
+    fun disconnectDevice(device: IDevice): Boolean
 
     /**
      * turn on bluetooth

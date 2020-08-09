@@ -2,27 +2,25 @@ package com.zygne.bluetooth
 
 import android.app.Activity
 import android.widget.Toast
-import com.zygne.bluetooth.domain.base.DeviceFilter
 import com.zygne.bluetooth.domain.base.IPermissionManager
+import com.zygne.bluetooth.domain.implementation.BluetoothDeviceManager
+import com.zygne.bluetooth.domain.implementation.BluetoothPermissionManager
 import com.zygne.bluetooth.domain.implementation.DeviceFilterManager
-import com.zygne.bluetooth.domain.implementation.DeviceManager
-import com.zygne.bluetooth.domain.implementation.PermissionManager
 import com.zygne.bluetooth.presentation.ui.BluetoothDialog
+import com.zygne.bluetooth.presentation.ui.BluetoothErrorDialog
 
 class BluetoothModule(private val activity: Activity) : IPermissionManager.Listener {
 
-    private val bluetoothPermissionManager = PermissionManager(activity, this)
-    private val bluetoothManager = DeviceManager(activity)
+    private val bluetoothPermissionManager = BluetoothPermissionManager(activity, this)
+    private val bluetoothManager = BluetoothDeviceManager(activity)
     private val filterManager = DeviceFilterManager()
 
     fun start() {
-        filterManager.setFilter(DeviceFilter.OuiFilter("40:83:DE"))
-        if (!bluetoothPermissionManager.hasRequiredPermission()) {
-            bluetoothPermissionManager.requestRequiredPermission()
+        if (!bluetoothManager.supportsFeature()) {
+            BluetoothErrorDialog(activity, activity.getString(R.string.bluetooth_not_supported_error)).show()
+            return
         }
-    }
 
-    fun showBluetoothDialog() {
         if (bluetoothPermissionManager.hasRequiredPermission()) {
             BluetoothDialog(activity, bluetoothManager, filterManager).show()
         } else {
@@ -42,9 +40,9 @@ class BluetoothModule(private val activity: Activity) : IPermissionManager.Liste
         )
     }
 
-    override fun onBluetoothPermissionGranted() {}
+    override fun onPermissionGranted() {}
 
-    override fun onBluetoothPermissionDenied() {
-        Toast.makeText(activity, "Permission to denied", Toast.LENGTH_LONG).show()
+    override fun onPermissionDenied() {
+        Toast.makeText(activity, "Permission denied", Toast.LENGTH_LONG).show()
     }
 }

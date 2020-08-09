@@ -1,17 +1,19 @@
 package com.zygne.bluetooth.presentation.presenter.implementation
 
+import com.zygne.bluetooth.domain.base.IDevice
 import com.zygne.bluetooth.domain.base.IDeviceManager
+import com.zygne.bluetooth.domain.implementation.BluetoothDeviceManager
 import com.zygne.bluetooth.domain.implementation.DeviceFilterManager
-import com.zygne.bluetooth.domain.implementation.DeviceManager
-import com.zygne.bluetooth.presentation.presenter.base.BluetoothDevicePresenter
+import com.zygne.bluetooth.presentation.presenter.base.IBluetoothDevicePresenter
 
-class BluetoothDevicePresenterImpl(
-    private val view: BluetoothDevicePresenter.View,
-    private val bluetoothManager: DeviceManager,
+internal class BluetoothDevicePresenter(
+    private val view: IBluetoothDevicePresenter.View,
+    private val bluetoothManager: BluetoothDeviceManager,
     private val filterManager: DeviceFilterManager
-) : BluetoothDevicePresenter, IDeviceManager.Listener {
+) : IBluetoothDevicePresenter, IDeviceManager.Listener {
 
-    private val bluetoothDeviceList: MutableList<com.zygne.bluetooth.domain.base.IDevice> = mutableListOf()
+    private val bluetoothDeviceList: MutableList<com.zygne.bluetooth.domain.base.IDevice> =
+        mutableListOf()
 
     override fun start() {
         bluetoothManager.setListener(this)
@@ -34,11 +36,11 @@ class BluetoothDevicePresenterImpl(
     }
 
     override fun createBond(position: Int) {
-        bluetoothManager.connectDevice(bluetoothDeviceList[position].address)
+        bluetoothManager.connectDevice(bluetoothDeviceList[position])
     }
 
     override fun removeBond(position: Int) {
-        bluetoothManager.disconnectDevice(bluetoothDeviceList[position].address)
+        bluetoothManager.disconnectDevice(bluetoothDeviceList[position])
     }
 
     override fun onDeviceLookUpStarted() {
@@ -49,7 +51,7 @@ class BluetoothDevicePresenterImpl(
         view.deviceLookUpStopped()
     }
 
-    override fun onNewDeviceFound(device: com.zygne.bluetooth.domain.IDevice) {
+    override fun onNewDeviceFound(device: IDevice) {
 
         bluetoothDeviceList.clear()
         bluetoothDeviceList.addAll(bluetoothManager.getConnectedDevices())
@@ -60,7 +62,7 @@ class BluetoothDevicePresenterImpl(
         view.updateDeviceList(bluetoothDeviceList)
     }
 
-    override fun onDeviceConnected(device: com.zygne.bluetooth.domain.IDevice) {
+    override fun onDeviceConnected(device: IDevice) {
         bluetoothDeviceList.clear()
         bluetoothDeviceList.addAll(bluetoothManager.getConnectedDevices())
         bluetoothDeviceList.addAll(bluetoothManager.getNewDevices())
@@ -70,7 +72,7 @@ class BluetoothDevicePresenterImpl(
         view.updateDeviceList(bluetoothDeviceList)
     }
 
-    override fun onDeviceDisconnected(device: com.zygne.bluetooth.domain.IDevice) {
+    override fun onDeviceDisconnected(device: IDevice) {
         bluetoothDeviceList.clear()
         bluetoothDeviceList.addAll(bluetoothManager.getConnectedDevices())
         bluetoothDeviceList.addAll(bluetoothManager.getNewDevices())

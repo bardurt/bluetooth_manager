@@ -2,7 +2,7 @@ package com.zygne.bluetooth.presentation.presenter.base
 
 import com.zygne.bluetooth.domain.base.IDevice
 
-interface BluetoothDevicePresenter {
+internal interface IBluetoothDevicePresenter {
 
     fun start()
     fun startDeviceLookUp()

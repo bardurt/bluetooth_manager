@@ -5,7 +5,7 @@ import android.bluetooth.BluetoothDevice.BOND_BONDED
 import com.zygne.bluetooth.domain.base.Connection
 import com.zygne.bluetooth.domain.base.IDevice
 
-class IDevice(val bluetoothDevice: BluetoothDevice) :
+class BTDevice(val bluetoothDevice: BluetoothDevice) :
     IDevice {
 
     override val name: String
@@ -29,7 +29,7 @@ class IDevice(val bluetoothDevice: BluetoothDevice) :
         if (other == null) {
             return false
         }
-        if (other !is com.zygne.bluetooth.domain.IDevice) {
+        if (other !is com.zygne.bluetooth.domain.BTDevice) {
             return false
         }
 

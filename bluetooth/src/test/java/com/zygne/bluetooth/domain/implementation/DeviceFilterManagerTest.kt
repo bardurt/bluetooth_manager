@@ -15,7 +15,7 @@ class DeviceFilterManagerTest {
         val device1 = Device1()
         val device2 = Device2()
 
-        var deviceList = mutableListOf(device1, device2)
+        val deviceList = mutableListOf(device1, device2)
 
         deviceFilterManager.filterDevices(deviceList)
 
@@ -27,7 +27,7 @@ class DeviceFilterManagerTest {
         val device1 = Device1()
         val device2 = Device2()
 
-        var deviceList = mutableListOf(device1, device2)
+        val deviceList = mutableListOf(device1, device2)
         deviceFilterManager.setFilter(DeviceFilter.NameFilter(device1.name))
 
         deviceFilterManager.filterDevices(deviceList)
@@ -42,7 +42,7 @@ class DeviceFilterManagerTest {
         val device1 = Device1()
         val device2 = Device2()
 
-        var deviceList = mutableListOf(device1, device2)
+        val deviceList = mutableListOf(device1, device2)
         deviceFilterManager.setFilter(DeviceFilter.NameFilter("Some Name"))
 
         deviceFilterManager.filterDevices(deviceList)
