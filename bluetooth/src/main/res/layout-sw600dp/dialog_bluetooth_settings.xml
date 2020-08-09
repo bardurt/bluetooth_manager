@@ -38,8 +38,8 @@
 
         <ImageView
             android:id="@+id/iv_close_bluetooth_dialog"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="@drawable/ic_close_white" />
 
     </LinearLayout>
@@ -76,13 +76,13 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp" />
-
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ll_discovery_progress_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal"
             android:visibility="invisible">
 
@@ -97,15 +97,15 @@
                 android:layout_height="0dp" />
 
             <ProgressBar
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:indeterminate="true" />
 
         </LinearLayout>
 
         <Space
             android:layout_width="0dp"
-            android:layout_height="8dp" />
+            android:layout_height="16dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -113,6 +113,57 @@
             android:orientation="vertical"
             android:paddingTop="8dp"
             android:paddingBottom="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/table_header_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/name"/>
+
+                <TextView
+                    style="@style/table_header_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/address" />
+
+                <TextView
+                    style="@style/table_header_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/oui" />
+
+                <TextView
+                    style="@style/table_header_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/status" />
+
+                <TextView
+                    style="@style/table_header_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/action" />
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="4dp"/>
 
             <View
                 android:layout_width="match_parent"

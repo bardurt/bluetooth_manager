@@ -19,4 +19,9 @@ class MainActivity : AppCompatActivity() {
             bluetoothModule.start()
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        bluetoothModule.stop()
+    }
 }
