@@ -1,5 +1,11 @@
 # Bluetooth Manager
+Library to search for and Pair / Unpair Bluetooth devices.
 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/10849157/89739237-c078e080-da44-11ea-9fb0-87ad28b2fb41.png" width="256" title="hover text">
+</p>
+
+</br>
 
 ### Add Library to your Android Project
 
