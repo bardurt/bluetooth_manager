@@ -8,10 +8,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.util.Log
+import com.zygne.bluetooth.domain.BTDevice
+import com.zygne.bluetooth.domain.base.Connection
+import com.zygne.bluetooth.domain.base.IDevice
 import com.zygne.bluetooth.domain.base.IDeviceManager
-import com.zygne.bluetooth.domain.base.IDeviceManager.Commands.REMOVE_BOND
+import java.lang.RuntimeException
 
-class DeviceManager(
+class BluetoothDeviceManager(
     private var context: Activity
 ) : IDeviceManager {
 
@@ -27,8 +30,8 @@ class DeviceManager(
 
     private val bluetoothAdapter: BluetoothAdapter? get() = BluetoothAdapter.getDefaultAdapter()
 
-    private var unBondedDevices: MutableList<com.zygne.bluetooth.domain.IDevice> = mutableListOf()
-    private var bondedDevices: MutableList<com.zygne.bluetooth.domain.IDevice> = mutableListOf()
+    private var unBondedDevices: MutableList<com.zygne.bluetooth.domain.BTDevice> = mutableListOf()
+    private var bondedDevices: MutableList<com.zygne.bluetooth.domain.BTDevice> = mutableListOf()
 
     private val bluetoothReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -50,11 +53,11 @@ class DeviceManager(
                         Log.d(TAG, "deviceClass = ${device.bluetoothClass.deviceClass}")
                         Log.d(TAG, "majorDeviceClass = ${device.bluetoothClass.majorDeviceClass}")
                         Log.d(TAG, "name = ${device.name}")
-                        if (!unBondedDevices.contains(com.zygne.bluetooth.domain.IDevice(device))) {
-                            unBondedDevices.add(com.zygne.bluetooth.domain.IDevice(device))
+                        if (!unBondedDevices.contains(com.zygne.bluetooth.domain.BTDevice(device))) {
+                            unBondedDevices.add(com.zygne.bluetooth.domain.BTDevice(device))
                         }
 
-                        listener?.onNewDeviceFound(com.zygne.bluetooth.domain.IDevice(device))
+                        listener?.onNewDeviceFound(com.zygne.bluetooth.domain.BTDevice(device))
                     }
                 }
                 BluetoothAdapter.ACTION_DISCOVERY_FINISHED == action -> listener?.onDeviceLookUpFinished()
@@ -67,11 +70,11 @@ class DeviceManager(
                     val bondState = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, 0)
 
                     if (BluetoothDevice.BOND_BONDED == bondState) {
-                        unBondedDevices.remove(com.zygne.bluetooth.domain.IDevice(device))
-                        listener?.onDeviceConnected(com.zygne.bluetooth.domain.IDevice(device))
+                        unBondedDevices.remove(com.zygne.bluetooth.domain.BTDevice(device))
+                        listener?.onDeviceConnected(com.zygne.bluetooth.domain.BTDevice(device))
                     } else if (BluetoothDevice.BOND_NONE == bondState) {
-                        unBondedDevices.add(com.zygne.bluetooth.domain.IDevice(device))
-                        listener?.onDeviceDisconnected(com.zygne.bluetooth.domain.IDevice(device))
+                        unBondedDevices.add(com.zygne.bluetooth.domain.BTDevice(device))
+                        listener?.onDeviceDisconnected(com.zygne.bluetooth.domain.BTDevice(device))
                     }
                 }
             }
@@ -109,7 +112,7 @@ class DeviceManager(
 
         bluetoothAdapter?.let {
             for (device in it.bondedDevices) {
-                bondedDevices.add(com.zygne.bluetooth.domain.IDevice(device))
+                bondedDevices.add(com.zygne.bluetooth.domain.BTDevice(device))
             }
         }
 
@@ -133,7 +136,7 @@ class DeviceManager(
         bluetoothAdapter?.cancelDiscovery()
     }
 
-    override fun disconnectDevice(address: String): Boolean {
+    override fun disconnectDevice(device: IDevice): Boolean {
         bluetoothAdapter?.let {
             if (it.isDiscovering) {
                 Log.d(TAG, "Bluetooth cancelling discovery.")
@@ -141,21 +144,25 @@ class DeviceManager(
             }
         }
 
-        var iDevice: com.zygne.bluetooth.domain.IDevice? = null
+        if (device.connection != Connection.Bluetooth) {
+            throw RuntimeException("Device is not a bluetooth device")
+        }
+
+        var btDevice: BTDevice? = null
         getConnectedDevices()
-        for (device in bondedDevices) {
-            if (device.address == address) {
-                iDevice = device
+        for (item in bondedDevices) {
+            if (item.address == device.address) {
+                btDevice = item
             }
         }
 
-        if (iDevice == null) {
+        if (btDevice == null) {
             return false
         }
 
         var success = true
         try {
-            val bluetoothDevice = iDevice.bluetoothDevice
+            val bluetoothDevice = btDevice.bluetoothDevice
             BluetoothDevice::class.java.getMethod(REMOVE_BOND).invoke(bluetoothDevice)
         } catch (e: Exception) {
             Log.d(TAG, "Unpairing has failed. ${e.message}")
@@ -165,7 +172,7 @@ class DeviceManager(
         return success
     }
 
-    override fun connectDevice(address: String): Boolean {
+    override fun connectDevice(device: IDevice): Boolean {
         bluetoothAdapter?.let {
             if (it.isDiscovering) {
                 Log.d(TAG, "Bluetooth cancelling discovery.")
@@ -173,14 +180,18 @@ class DeviceManager(
             }
         }
 
-        var iDevice: com.zygne.bluetooth.domain.IDevice? = null
-        for (device in unBondedDevices) {
-            if (device.address == address) {
-                iDevice = device
+        if (device.connection != Connection.Bluetooth) {
+            throw RuntimeException("Device is not a bluetooth device")
+        }
+
+        var btDevice: com.zygne.bluetooth.domain.BTDevice? = null
+        for (item in unBondedDevices) {
+            if (item.address == device.address) {
+                btDevice = item
             }
         }
 
-        val result = iDevice?.bluetoothDevice?.createBond()
+        val result = btDevice?.bluetoothDevice?.createBond()
 
         return true
     }
@@ -215,6 +226,8 @@ class DeviceManager(
     }
 
     companion object {
-        private val TAG = DeviceManager::class.java.simpleName
+        private val TAG = BluetoothDeviceManager::class.java.simpleName
+        private const val CREATE_BOND = "createBond"
+        private const val REMOVE_BOND = "removeBond"
     }
 }

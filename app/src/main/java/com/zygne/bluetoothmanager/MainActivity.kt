@@ -14,10 +14,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         bluetoothModule = BluetoothModule(this)
-        bluetoothModule.start()
 
         btn_bluetooth.setOnClickListener {
-            bluetoothModule.showBluetoothDialog()
+            bluetoothModule.start()
         }
     }
 }

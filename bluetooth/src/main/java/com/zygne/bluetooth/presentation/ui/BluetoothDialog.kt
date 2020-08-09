@@ -10,19 +10,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zygne.bluetooth.R
 import com.zygne.bluetooth.domain.base.IDevice
+import com.zygne.bluetooth.domain.implementation.BluetoothDeviceManager
 import com.zygne.bluetooth.domain.implementation.DeviceFilterManager
-import com.zygne.bluetooth.domain.implementation.DeviceManager
-import com.zygne.bluetooth.presentation.presenter.base.BluetoothDevicePresenter
-import com.zygne.bluetooth.presentation.presenter.implementation.BluetoothDevicePresenterImpl
+import com.zygne.bluetooth.presentation.presenter.base.IBluetoothDevicePresenter
+import com.zygne.bluetooth.presentation.presenter.implementation.BluetoothDevicePresenter
 import kotlinx.android.synthetic.main.dialog_bluetooth_settings.*
 
-class BluetoothDialog(
+internal class BluetoothDialog(
     activity: Activity,
-    bluetoothManager: DeviceManager,
+    bluetoothManager: BluetoothDeviceManager,
     filterManager: DeviceFilterManager
 ) : Dialog(activity),
     DeviceAdapter.Callback,
-    BluetoothDevicePresenter.View {
+    IBluetoothDevicePresenter.View {
 
     private var discoveryProgressView: LinearLayout
     private var btnStartDiscovery: Switch
@@ -30,7 +30,7 @@ class BluetoothDialog(
 
     private var bluetoothDeviceAdapter: DeviceAdapter? = null
     private val bluetoothDeviceList: MutableList<IDevice> = mutableListOf()
-    private var presenter: BluetoothDevicePresenter
+    private var presenter: IBluetoothDevicePresenter
 
     init {
         setContentView(R.layout.dialog_bluetooth_settings)
@@ -60,7 +60,7 @@ class BluetoothDialog(
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = bluetoothDeviceAdapter
 
-        presenter = BluetoothDevicePresenterImpl(this, bluetoothManager, filterManager)
+        presenter = BluetoothDevicePresenter(this, bluetoothManager, filterManager)
         presenter.start()
     }
 

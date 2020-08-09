@@ -7,7 +7,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.zygne.bluetooth.domain.base.IPermissionManager
 
-class PermissionManager(
+class BluetoothPermissionManager(
     private val activity: Activity,
     private val listener: IPermissionManager.Listener
 ) : IPermissionManager {
@@ -38,9 +38,9 @@ class PermissionManager(
                 if (grantResults.isNotEmpty() &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED
                 ) {
-                    listener.onBluetoothPermissionGranted()
+                    listener.onPermissionGranted()
                 } else {
-                    listener.onBluetoothPermissionDenied()
+                    listener.onPermissionDenied()
                 }
                 return
             }

@@ -9,7 +9,7 @@ interface IPermissionManager {
     fun handlePermissionRequest(requestCode: Int, permissions: Array<out String>, grantResults: IntArray)
 
     interface Listener {
-        fun onBluetoothPermissionGranted()
-        fun onBluetoothPermissionDenied()
+        fun onPermissionGranted()
+        fun onPermissionDenied()
     }
 }

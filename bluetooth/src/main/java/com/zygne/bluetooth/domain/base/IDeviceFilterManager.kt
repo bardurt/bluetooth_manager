@@ -1,6 +1,6 @@
 package com.zygne.bluetooth.domain.base
 
-interface IDeviceFilterManager {
+internal interface IDeviceFilterManager {
 
     fun setFilter(deviceFilter: DeviceFilter)
 

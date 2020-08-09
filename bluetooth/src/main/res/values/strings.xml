@@ -8,4 +8,6 @@
     <string name="oui">OUI</string>
     <string name="status">Status</string>
     <string name="action">Action</string>
+    <string name="bluetooth_not_supported_error">This device does not support Bluetooth!!</string>
+    <string name="dismiss">Dismiss</string>
 </resources>
