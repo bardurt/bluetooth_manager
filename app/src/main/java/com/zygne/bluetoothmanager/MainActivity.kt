@@ -24,4 +24,8 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         bluetoothModule.stop()
     }
+
+    fun showBluetoothSettings() {
+        bluetoothModule.start()
+    }
 }

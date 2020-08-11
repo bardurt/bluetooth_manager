@@ -33,9 +33,7 @@ internal class BluetoothDevicePresenter(
 
         bluetoothDeviceList.addAll(bluetoothManager.getConnectedDevices())
 
-        filterManager.filterDevices(bluetoothDeviceList)
-
-        view.updateDeviceList(bluetoothDeviceList)
+        prepareDevices()
     }
 
     override fun activate() {
@@ -81,13 +79,7 @@ internal class BluetoothDevicePresenter(
         bluetoothDeviceList.addAll(bluetoothManager.getConnectedDevices())
         bluetoothDeviceList.addAll(bluetoothManager.getNewDevices())
 
-        filterManager.filterDevices(bluetoothDeviceList)
-
-        for (item in bluetoothDeviceList) {
-            vendorMapper.mapVendorToDevice(item)
-        }
-
-        view.updateDeviceList(bluetoothDeviceList)
+        prepareDevices()
     }
 
     override fun onDeviceConnected(device: IDevice) {
@@ -95,9 +87,7 @@ internal class BluetoothDevicePresenter(
         bluetoothDeviceList.addAll(bluetoothManager.getConnectedDevices())
         bluetoothDeviceList.addAll(bluetoothManager.getNewDevices())
 
-        filterManager.filterDevices(bluetoothDeviceList)
-
-        view.updateDeviceList(bluetoothDeviceList)
+        prepareDevices()
     }
 
     override fun onDeviceDisconnected(device: IDevice) {
@@ -105,9 +95,7 @@ internal class BluetoothDevicePresenter(
         bluetoothDeviceList.addAll(bluetoothManager.getConnectedDevices())
         bluetoothDeviceList.addAll(bluetoothManager.getNewDevices())
 
-        filterManager.filterDevices(bluetoothDeviceList)
-
-        view.updateDeviceList(bluetoothDeviceList)
+        prepareDevices()
     }
 
     override fun onConnectionStateChanged(state: IDeviceManager.ConnectionState) {
@@ -119,5 +107,15 @@ internal class BluetoothDevicePresenter(
         } else {
             view.onInactive()
         }
+    }
+
+    private fun prepareDevices() {
+        filterManager.filterDevices(bluetoothDeviceList)
+
+        for (item in bluetoothDeviceList) {
+            vendorMapper.mapVendorToDevice(item)
+        }
+
+        view.updateDeviceList(bluetoothDeviceList)
     }
 }

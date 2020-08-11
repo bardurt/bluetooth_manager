@@ -51,7 +51,10 @@ object Vendors {
         "24FCE5" to "Samsung Electronics Co.,Ltd",
         "74EB80" to "Samsung Electronics Co.,Ltd",
         "5CF6DC" to "Samsung Electronics Co.,Ltd",
+        "D49DC0" to "Samsung Electronics Co.,Ltd",
 
-        "0CB527" to "HUAWEI TECHNOLOGIES CO.,LTD"
+        "0CB527" to "HUAWEI TECHNOLOGIES CO.,LTD",
+
+        "2C6E85" to "Intel Corporate"
     )
 }
