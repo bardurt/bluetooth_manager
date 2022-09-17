@@ -17,7 +17,7 @@ internal class BluetoothDevicePresenter(
 
     private var startLookupOnActivation = false
 
-    private val bluetoothDeviceList: MutableList<com.zygne.bluetooth.domain.base.IDevice> =
+    private val bluetoothDeviceList: MutableList<IDevice> =
         mutableListOf()
 
     override fun start() {

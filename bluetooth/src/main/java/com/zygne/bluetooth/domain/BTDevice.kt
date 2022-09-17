@@ -37,7 +37,7 @@ class BTDevice(val bluetoothDevice: BluetoothDevice) :
         if (other == null) {
             return false
         }
-        if (other !is com.zygne.bluetooth.domain.BTDevice) {
+        if (other !is BTDevice) {
             return false
         }
 

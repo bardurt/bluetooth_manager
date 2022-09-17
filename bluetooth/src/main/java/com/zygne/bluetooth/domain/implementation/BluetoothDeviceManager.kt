@@ -33,8 +33,8 @@ class BluetoothDeviceManager(
 
     private val bluetoothAdapter: BluetoothAdapter? get() = BluetoothAdapter.getDefaultAdapter()
 
-    private var unBondedDevices: MutableList<com.zygne.bluetooth.domain.BTDevice> = mutableListOf()
-    private var bondedDevices: MutableList<com.zygne.bluetooth.domain.BTDevice> = mutableListOf()
+    private var unBondedDevices: MutableList<BTDevice> = mutableListOf()
+    private var bondedDevices: MutableList<BTDevice> = mutableListOf()
 
     private val bluetoothReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -56,11 +56,11 @@ class BluetoothDeviceManager(
                         Log.d(TAG, "deviceClass = ${device.bluetoothClass.deviceClass}")
                         Log.d(TAG, "majorDeviceClass = ${device.bluetoothClass.majorDeviceClass}")
                         Log.d(TAG, "name = ${device.name}")
-                        if (!unBondedDevices.contains(com.zygne.bluetooth.domain.BTDevice(device))) {
-                            unBondedDevices.add(com.zygne.bluetooth.domain.BTDevice(device))
+                        if (!unBondedDevices.contains(BTDevice(device))) {
+                            unBondedDevices.add(BTDevice(device))
                         }
 
-                        listener?.onNewDeviceFound(com.zygne.bluetooth.domain.BTDevice(device))
+                        listener?.onNewDeviceFound(BTDevice(device))
                     }
                 }
                 BluetoothAdapter.ACTION_DISCOVERY_FINISHED == action -> listener?.onDeviceLookUpFinished()
@@ -73,11 +73,11 @@ class BluetoothDeviceManager(
                     val bondState = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, 0)
 
                     if (BluetoothDevice.BOND_BONDED == bondState) {
-                        unBondedDevices.remove(com.zygne.bluetooth.domain.BTDevice(device))
-                        listener?.onDeviceConnected(com.zygne.bluetooth.domain.BTDevice(device))
+                        unBondedDevices.remove(BTDevice(device))
+                        listener?.onDeviceConnected(BTDevice(device))
                     } else if (BluetoothDevice.BOND_NONE == bondState) {
-                        unBondedDevices.add(com.zygne.bluetooth.domain.BTDevice(device))
-                        listener?.onDeviceDisconnected(com.zygne.bluetooth.domain.BTDevice(device))
+                        unBondedDevices.add(BTDevice(device))
+                        listener?.onDeviceDisconnected(BTDevice(device))
                     }
                 }
             }
@@ -122,19 +122,19 @@ class BluetoothDeviceManager(
         return false
     }
 
-    override fun getConnectedDevices(): MutableList<com.zygne.bluetooth.domain.base.IDevice> {
+    override fun getConnectedDevices(): MutableList<IDevice> {
         bondedDevices.clear()
 
         bluetoothAdapter?.let {
             for (device in it.bondedDevices) {
-                bondedDevices.add(com.zygne.bluetooth.domain.BTDevice(device))
+                bondedDevices.add(BTDevice(device))
             }
         }
 
         return bondedDevices.toMutableList()
     }
 
-    override fun getNewDevices(): MutableList<com.zygne.bluetooth.domain.base.IDevice> {
+    override fun getNewDevices(): MutableList<IDevice> {
         return unBondedDevices.toMutableList()
     }
 
@@ -199,7 +199,7 @@ class BluetoothDeviceManager(
             throw RuntimeException("Device is not a bluetooth device")
         }
 
-        var btDevice: com.zygne.bluetooth.domain.BTDevice? = null
+        var btDevice: BTDevice? = null
         for (item in unBondedDevices) {
             if (item.address == device.address) {
                 btDevice = item

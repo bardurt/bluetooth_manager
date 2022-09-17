@@ -8,7 +8,7 @@ class VendorMapper : IVendorMapper {
 
     override fun mapVendorToDevice(device: IDevice): IDevice {
 
-        var oui = device.oui.replace(":", "")
+        val oui = device.oui.replace(":", "")
         var vendor = Vendors.ouiMap[oui]
 
         if (vendor == null) {

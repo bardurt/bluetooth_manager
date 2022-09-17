@@ -8,8 +8,9 @@
     <string name="oui">OUI</string>
     <string name="status">Status</string>
     <string name="action">Action</string>
-    <string name="bluetooth_not_supported_error">This device does not support Bluetooth!!</string>
+    <string name="bluetooth_not_supported_error">This device does not support Bluetooth!</string>
     <string name="dismiss">Dismiss</string>
+    <string name="bluetooth_permission_denied">Permission to use Bluetooth denied!</string>
     <string name="scanning_for_bluetooth_devices">Scanning for Bluetooth devices</string>
     <string name="scan">Scan</string>
     <string name="on">On</string>

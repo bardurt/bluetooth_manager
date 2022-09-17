@@ -47,6 +47,6 @@ class BluetoothModule(private val activity: Activity) : IPermissionManager.Liste
     override fun onPermissionGranted() {}
 
     override fun onPermissionDenied() {
-        Toast.makeText(activity, "Permission denied", Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, activity.getString(R.string.bluetooth_permission_denied), Toast.LENGTH_LONG).show()
     }
 }
